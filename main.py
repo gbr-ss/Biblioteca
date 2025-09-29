@@ -39,25 +39,10 @@ def atualizar_banco(id_livro, disponivel):
         """, (disponivel, id_livro))
     conexao.commit()
     return cursor.rowcount > 0
-def deletar_banco():
-    try:
-        conexao = sqlite3.connect("biblioteca.db")
-        cursor = conexao.cursor()
-        mostra_lista()
-        id_livro = int(input("Digite o id do livro que deseja deletar: "))
-        cursor.execute("DELETE FROM biblioteca WHERE id = ?", (id_livro,))
-        conexao.commit()
-       
-        if cursor.rowcount > 0:
-            print("O livro foi removido com sucesso!")
-        else:
-            print("Nenhum livro cadastrado com o ID fornecido")
-    except Exception as erro:
-        print(f"Erro ao tentar excluir o livro {erro}")
-    finally:
-        #Sempre fecha a conexão, com sucesso ou erro
-        if conexao:
-            conexao.close()
+def deletar_banco(id_livro):
+    cursor.execute("DELETE FROM biblioteca WHERE id = ?", (id_livro,))
+    conexao.commit()
+    return cursor.rowcount > 0
 
 st.title("Sistema de Gerenciamento de Biblioteca")
 tab_adicionar, tab_mostrar, tab_atualizar, tab_deletar = st.tabs(["Adicionar Livro", "Mostrar Livros", "Atualizar Livro", "Deletar Livro"])
@@ -96,5 +81,17 @@ with tab_atualizar:
         if submitted_atualizar:
             if atualizar_banco(id_livro_atualizar, novo_status):
                 st.success("Livro atualizado com sucesso!")
+            else:
+                st.warning("Nenhum livro encontrado com o ID fornecido.")
+
+with tab_deletar:
+    st.header("Excluir Livro")
+    with st.form("form_deletar"):
+        id_livro_deletar = st.number_input("Digite o ID do livro que deseja deletar:", min_value=1, format="%d")
+        submitted_deletar = st.form_submit_button("Deletar")
+
+        if submitted_deletar:
+            if deletar_banco(id_livro_deletar):
+                st.success("O livro foi removido com sucesso!")
             else:
                 st.warning("Nenhum livro encontrado com o ID fornecido.")
