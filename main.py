@@ -86,3 +86,15 @@ with tab_mostrar:
         else:
             st.warning("Nenhum livro cadastrado.")
 
+with tab_atualizar:
+    st.header("Atualizar Status de Livro")
+    with st.form("form_atualizar"):
+        id_livro_atualizar = st.number_input("Digite o ID do livro que deseja atualizar:", min_value=1, format="%d")
+        novo_status = st.selectbox("Selecione a disponibilidade:", ["sim", "não"])
+        submitted_atualizar = st.form_submit_button("Atualizar")
+
+        if submitted_atualizar:
+            if atualizar_banco(id_livro_atualizar, novo_status):
+                st.success("Livro atualizado com sucesso!")
+            else:
+                st.warning("Nenhum livro encontrado com o ID fornecido.")
