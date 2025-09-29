@@ -10,17 +10,6 @@ cursor.execute("""
     disponivel TEXT CHECK(disponivel IN ('sim', 'não'))
     )
 """)
-biblioteca = [
-   ("Enzo", "a", 2, "sim"),
-    ("Murilo", "b", 3, "não"),
-    ("Eduardo", "b", 4, "sim")
-]
-
-cursor.executemany("""
-    INSERT INTO biblioteca (titulo, autor, ano, disponivel)
-    VALUES (?, ?, ?, ?)
-""", biblioteca)
-conexao.commit()
 def adicionando():
     titulo = input("Digite o nome do livro que deseja cadastrar: ")
     autor = input("Digite o nome do autor:  ")
@@ -33,7 +22,7 @@ def adicionando():
     conexao.commit()
 
 def mostra_lista():
-    cursor.execute("SELECT * FROM titulo")
+    cursor.execute("SELECT * FROM biblioteca")
     for linha in cursor.fetchall():
         print(f"ID: {linha[0]} | TITULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIVEL: {linha[4]}")
 
@@ -56,12 +45,11 @@ def deletar_banco():
     try:
         conexao = sqlite3.connect("biblioteca.db")
         cursor = conexao.cursor()
-       
+        mostra_lista()
         id_livro = int(input("Digite o id do livro que deseja deletar: "))
-        cursor.execute("DELETE FROM alunos WHERE id = ?", (id_livro,))
+        cursor.execute("DELETE FROM biblioteca WHERE id = ?", (id_livro,))
         conexao.commit()
        
-        #Verificar se o aluno foi realmente deletado
         if cursor.rowcount > 0:
             print("O livro foi removido com sucesso!")
         else:
