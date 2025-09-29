@@ -25,11 +25,11 @@ def adicionando(titulo,autor, ano):
         VALUES (?, ?, ?, ?)
     """, (titulo, autor, ano, disponivel))
     conexao.commit()
+    return True
 
 def mostra_lista():
     cursor.execute("SELECT * FROM biblioteca")
-    for linha in cursor.fetchall():
-        print(f"ID: {linha[0]} | TITULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIVEL: {linha[4]}")
+    return cursor.fetchall()
 
 def atualizar_banco():
     try:
@@ -76,20 +76,6 @@ def deletar_banco():
         #Sempre fecha a conexão, com sucesso ou erro
         if conexao:
             conexao.close()
-# while True:
-        
-#     pergunta=int(input("----------Menu----------\n1-Adicionar Livros\n2-Mostrar Livros\n3-Atualizar Livro\n4-Excluir Livro\n5-Sair\n----------Resposta----------\nR:"))
-#     if pergunta == 1:
-        titulo = st.text_input("Digite o nome do livro que deseja cadastrar: ")
-        autor = st.text_input("Digite o nome do autor:  ")
-        ano = st.number_input("Digite o ano de lançamento do livro:  ")
-#         adicionando(titulo,autor, ano)
-#     if pergunta == 2:
-#         mostra_lista()
-#     if pergunta ==3:
-#         atualizar_banco()
-#     if pergunta == 4:
-#         deletar_banco()
-#     if pergunta == 5:
-#         break
 
+st.title("Sistema de Gerenciamento de Biblioteca")
+tab_adicionar, tab_mostrar, tab_atualizar, tab_deletar = st.tabs(["Adicionar Livro", "Mostrar Livros", "Atualizar Livro", "Deletar Livro"])
