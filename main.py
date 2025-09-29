@@ -14,9 +14,11 @@ def adicionando():
     titulo = input("Digite o nome do livro que deseja cadastrar: ")
     autor = input("Digite o nome do autor:  ")
     ano = int(input("Digite o ano de lançamento do livro:  "))
-    disponivel = "sim"  # Define o valor padrão para 'disponivel'
+    disponivel = "sim"
     cursor.execute("""
         INSERT INTO biblioteca (titulo, autor, ano, disponivel)
         VALUES (?, ?, ?, ?)
     """, (titulo, autor, ano, disponivel))
     conexao.commit()
+def mostra_lista(linha):
+    print(f"ID: {linha[0]} | TITULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIVEL: {linha[4]}")
