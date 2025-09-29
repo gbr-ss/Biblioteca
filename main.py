@@ -85,3 +85,12 @@ with tab_adicionar:
         titulo = st.text_input("Digite o nome do livro que deseja cadastrar:")
         autor = st.text_input("Digite o nome do autor:")
         ano = st.number_input("Digite o ano de lançamento do livro:", min_value=1500, format="%d")
+
+        submitted = st.form_submit_button("Cadastrar Livro")
+
+        if submitted:
+            if titulo and autor and ano:
+                adicionando(titulo, autor, ano)
+                st.success("Livro adicionado com sucesso!")
+            else:
+                st.error("Por favor, preencha todos os campos.")
