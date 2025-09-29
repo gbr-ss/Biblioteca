@@ -84,14 +84,3 @@ with tab_atualizar:
             else:
                 st.warning("Nenhum livro encontrado com o ID fornecido.")
 
-with tab_deletar:
-    st.header("Excluir Livro")
-    with st.form("form_deletar"):
-        id_livro_deletar = st.number_input("Digite o ID do livro que deseja deletar:", min_value=1, format="%d")
-        submitted_deletar = st.form_submit_button("Deletar")
-
-        if submitted_deletar:
-            if deletar_banco(id_livro_deletar):
-                st.success("O livro foi removido com sucesso!")
-            else:
-                st.warning("Nenhum livro encontrado com o ID fornecido.")
