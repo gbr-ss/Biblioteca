@@ -31,32 +31,14 @@ def mostra_lista():
     cursor.execute("SELECT * FROM biblioteca")
     return cursor.fetchall()
 
-def atualizar_banco():
-    try:
-        print(mostra_lista)
-
-        id_livro = input("Digite o ID do livro que deseja atualizar: ")
-
-        disponivel = input("O livro esta disponivel so resposta de 'sim' or 'não':")
-
-        cursor.execute("""
+def atualizar_banco(id_livro, disponivel):
+    cursor.execute("""
         UPDATE biblioteca
         SET disponivel = ?
         WHERE id = ?    
-        """,(disponivel, id_livro))
-        if cursor.rowcount > 0:
-            print("O livro foi atualizado com sucesso!")
-        else:
-            print("Nenhum livro encontrado com o ID fornecido")
-    except Exception as erro:
-            print(f"Erro ao tentar atualizar o livro {erro}")
-    finally:
-        #Sempre fecha a conexão, com sucesso ou erro
-        if conexao:
-            conexao.close()
-
+        """, (disponivel, id_livro))
     conexao.commit()
-    print("Status do livro atualizado") 
+    return cursor.rowcount > 0
 def deletar_banco():
     try:
         conexao = sqlite3.connect("biblioteca.db")
@@ -103,3 +85,4 @@ with tab_mostrar:
             st.table([["ID", "TITULO", "AUTOR", "ANO", "DISPONIVEL"]] + dados)
         else:
             st.warning("Nenhum livro cadastrado.")
+
