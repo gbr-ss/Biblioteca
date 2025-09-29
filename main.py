@@ -50,3 +50,37 @@ def atualizar_banco():
 
     conexao.commit()
     print("Status do livro atualizado") 
+def deletar_banco():
+    try:
+        conexao = sqlite3.connect("biblioteca.db")
+        cursor = conexao.cursor()
+       
+        id_livro = int(input("Digite o id do livro que deseja deletar: "))
+        cursor.execute("DELETE FROM alunos WHERE id = ?", (id_livro,))
+        conexao.commit()
+       
+        #Verificar se o aluno foi realmente deletado
+        if cursor.rowcount > 0:
+            print("O livro foi removido com sucesso!")
+        else:
+            print("Nenhum livro cadastrado com o ID fornecido")
+    except Exception as erro:
+        print(f"Erro ao tentar excluir o livro {erro}")
+    finally:
+        #Sempre fecha a conexão, com sucesso ou erro
+        if conexao:
+            conexao.close()
+while True:
+        
+    pergunta=int(input("----------Menu----------\n1-Adicionar Livros\n2-Mostrar Livros\n3-Atualizar Livro\n4-Excluir Livro\n5-Sair\n----------Resposta----------\nR:"))
+    if pergunta == 1:
+        adicionando()
+    if pergunta == 2:
+        mostra_lista()
+    if pergunta ==3:
+        atualizar_banco()
+    if pergunta == 4:
+        deletar_banco()
+    if pergunta == 5:
+        break
+
