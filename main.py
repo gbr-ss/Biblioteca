@@ -27,17 +27,28 @@ def mostra_lista():
         print(f"ID: {linha[0]} | TITULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIVEL: {linha[4]}")
 
 def atualizar_banco():
-    print(mostra_lista)
+    try:
+        print(mostra_lista)
 
-    id_livro = input("Digite o ID do livro que deseja atualizar: ")
+        id_livro = input("Digite o ID do livro que deseja atualizar: ")
 
-    disponivel = input("O livro esta disponivel so resposta de 'sim' or 'não':")
+        disponivel = input("O livro esta disponivel so resposta de 'sim' or 'não':")
 
-    cursor.execute("""
-    UPDATE biblioteca
-    SET disponivel = ?
-    WHERE id = ?    
-    """,(disponivel, id_livro))
+        cursor.execute("""
+        UPDATE biblioteca
+        SET disponivel = ?
+        WHERE id = ?    
+        """,(disponivel, id_livro))
+        if cursor.rowcount > 0:
+            print("O livro foi atualizado com sucesso!")
+        else:
+            print("Nenhum livro encontrado com o ID fornecido")
+    except Exception as erro:
+            print(f"Erro ao tentar atualizar o livro {erro}")
+    finally:
+        #Sempre fecha a conexão, com sucesso ou erro
+        if conexao:
+            conexao.close()
 
     conexao.commit()
     print("Status do livro atualizado") 
@@ -60,17 +71,17 @@ def deletar_banco():
         #Sempre fecha a conexão, com sucesso ou erro
         if conexao:
             conexao.close()
-while True:
+# while True:
         
-    pergunta=int(input("----------Menu----------\n1-Adicionar Livros\n2-Mostrar Livros\n3-Atualizar Livro\n4-Excluir Livro\n5-Sair\n----------Resposta----------\nR:"))
-    if pergunta == 1:
-        adicionando()
-    if pergunta == 2:
-        mostra_lista()
-    if pergunta ==3:
-        atualizar_banco()
-    if pergunta == 4:
-        deletar_banco()
-    if pergunta == 5:
-        break
+#     pergunta=int(input("----------Menu----------\n1-Adicionar Livros\n2-Mostrar Livros\n3-Atualizar Livro\n4-Excluir Livro\n5-Sair\n----------Resposta----------\nR:"))
+#     if pergunta == 1:
+#         adicionando()
+#     if pergunta == 2:
+#         mostra_lista()
+#     if pergunta ==3:
+#         atualizar_banco()
+#     if pergunta == 4:
+#         deletar_banco()
+#     if pergunta == 5:
+#         break
 
