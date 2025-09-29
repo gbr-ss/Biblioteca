@@ -79,3 +79,9 @@ def deletar_banco():
 
 st.title("Sistema de Gerenciamento de Biblioteca")
 tab_adicionar, tab_mostrar, tab_atualizar, tab_deletar = st.tabs(["Adicionar Livro", "Mostrar Livros", "Atualizar Livro", "Deletar Livro"])
+with tab_adicionar:
+    st.header("Adicionar Novo Livro")
+    with st.form("form_adicionar"):
+        titulo = st.text_input("Digite o nome do livro que deseja cadastrar:")
+        autor = st.text_input("Digite o nome do autor:")
+        ano = st.number_input("Digite o ano de lançamento do livro:", min_value=1500, format="%d")
