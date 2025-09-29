@@ -1,19 +1,24 @@
+import streamlit as st
 import sqlite3
-conexao = sqlite3.connect("biblioteca.db")
-cursor = conexao.cursor()
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS biblioteca(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    titulo TEXT NOT NULL,
-    autor TEXT NOT NULL,       
-    ano INTEGER,
-    disponivel TEXT CHECK(disponivel IN ('sim', 'não'))
-    )
-""")
-def adicionando():
-    titulo = input("Digite o nome do livro que deseja cadastrar: ")
-    autor = input("Digite o nome do autor:  ")
-    ano = int(input("Digite o ano de lançamento do livro:  "))
+@st.cache_resource
+def conectar_db():
+    conexao = sqlite3.connect("biblioteca.db")
+    cursor = conexao.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS biblioteca(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        titulo TEXT NOT NULL,
+        autor TEXT NOT NULL,       
+        ano INTEGER,
+        disponivel TEXT CHECK(disponivel IN ('sim', 'não'))
+        )
+    """)
+    conexao.commit()
+    return conexao, cursor
+
+conexao, cursor = conectar_db()
+
+def adicionando(titulo,autor, ano):
     disponivel = "sim"
     cursor.execute("""
         INSERT INTO biblioteca (titulo, autor, ano, disponivel)
@@ -75,7 +80,10 @@ def deletar_banco():
         
 #     pergunta=int(input("----------Menu----------\n1-Adicionar Livros\n2-Mostrar Livros\n3-Atualizar Livro\n4-Excluir Livro\n5-Sair\n----------Resposta----------\nR:"))
 #     if pergunta == 1:
-#         adicionando()
+        titulo = st.text_input("Digite o nome do livro que deseja cadastrar: ")
+        autor = st.text_input("Digite o nome do autor:  ")
+        ano = st.number_input("Digite o ano de lançamento do livro:  ")
+#         adicionando(titulo,autor, ano)
 #     if pergunta == 2:
 #         mostra_lista()
 #     if pergunta ==3:
