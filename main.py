@@ -94,3 +94,12 @@ with tab_adicionar:
                 st.success("Livro adicionado com sucesso!")
             else:
                 st.error("Por favor, preencha todos os campos.")
+
+with tab_mostrar:
+    st.header("Lista de Livros")
+    if st.button("Recarregar Lista"):
+        dados = mostra_lista()
+        if dados:
+            st.table([["ID", "TITULO", "AUTOR", "ANO", "DISPONIVEL"]] + dados)
+        else:
+            st.warning("Nenhum livro cadastrado.")
