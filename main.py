@@ -33,7 +33,9 @@ def adicionando():
     conexao.commit()
 
 def mostra_lista(linha):
-    print(f"ID: {linha[0]} | TITULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIVEL: {linha[4]}")
+    cursor.execute("SELECT * FROM titulo")
+    for linha in cursor.fetchall():
+        print(f"ID: {linha[0]} | TITULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIVEL: {linha[4]}")
 
 def atualizar_banco():
     print(mostra_lista)
