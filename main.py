@@ -60,14 +60,21 @@ def deletar_banco():
             conexao.close()
 
 st.title("Bem vindo a minha biblioteca 2.0")
-titulo = st.text_input("Digite o nome do livro que deseja cadastrar:")
-autor = st.text_input("Digite o nome do autor:")
-ano = st.number_input("Digite o ano de lançamento do livro:", step=1, format="%d")
+menu = st.sidebar.selectbox("Menu", ["Adicionar", "Listar", "Atualizar", "Deletar"])
 
-# 👇 Botão abaixo dos inputs
-if st.button("Cadastrar livro📕"):
-    if titulo and autor:
-        adicionando(titulo, autor, ano)
-        st.success("Livro cadastrado com sucesso!")
-    else:
-        st.warning("Preencha todos os campos antes de cadastrar.")
+if menu == "Adicionar":
+    st.title("Cadastros para os livros📕")
+    titulo = st.text_input("Digite o nome do livro que deseja cadastrar:")
+    autor = st.text_input("Digite o nome do autor:")
+    ano = st.number_input("Digite o ano de lançamento do livro:", step=1, format="%d")
+    if st.button("Cadastrar livro📕"):
+        if titulo and autor:
+            adicionando(titulo, autor, ano)
+            st.success("Livro cadastrado com sucesso!")
+        else:
+            st.warning("Preencha todos os campos antes de cadastrar.")
+if menu == "Listar":
+    st.title("livro cadastrados📕")
+    cursor.execute("SELECT * FROM biblioteca")
+    for linha in cursor.fetchall():
+        st.write(f"ID: {linha[0]} | TITULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIVEL: {linha[4]}")
