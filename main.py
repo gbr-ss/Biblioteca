@@ -96,3 +96,21 @@ if menu == "Atualizar":
             """,(disponivel, id_livro))
             conexao.commit()
             st.success("Status do livro atualizado")
+if menu == "Deletar":
+    st.title("Tira livro da lista📕")
+    mostra_lista()
+    id_livro = st.number_input("Digite o id do livro que deseja deletar: ",min_value=1,step=1)
+    if st.button("Deletar o Livro📕"):
+        try:
+            cursor.execute("DELETE FROM biblioteca WHERE id = ?", (id_livro,))
+            conexao.commit()
+            
+            if cursor.rowcount > 0:
+               st.success("O livro foi removido com sucesso!")
+            else:
+                    st.warning("Nenhum livro cadastrado com o ID fornecido")
+        except Exception as erro:
+            st.error(f"Erro ao tentar excluir o livro {erro}")
+        finally:
+            if conexao:
+                conexao.close()
