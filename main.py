@@ -78,3 +78,21 @@ if menu == "Listar":
     cursor.execute("SELECT * FROM biblioteca")
     for linha in cursor.fetchall():
         st.write(f"ID: {linha[0]} | TITULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIVEL: {linha[4]}")
+if menu == "Atualizar":
+    id_livro = st.number_input("Digite o ID do livro que deseja atualizar: ")
+    disponivel = st.selectbox("O livro esta disponivel so resposta de" ,['sim' , 'não'])
+
+    
+    if st.button("Atualizar o livro"):
+        cursor.execute("SELECT * FROM biblioteca WHERE id = ?", (id_livro,))
+        resultado = cursor.fetchone()
+        if resultado is None:
+            st.error("Id não encontrado")
+        else:
+            cursor.execute("""
+            UPDATE biblioteca
+            SET disponivel = ?
+            WHERE id = ?    
+            """,(disponivel, id_livro))
+            conexao.commit()
+            st.success("Status do livro atualizado")
