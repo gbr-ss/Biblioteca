@@ -1,3 +1,4 @@
+import streamlit as st
 import sqlite3
 conexao = sqlite3.connect("biblioteca.db")
 cursor = conexao.cursor()
@@ -10,10 +11,7 @@ cursor.execute("""
     disponivel TEXT CHECK(disponivel IN ('sim', 'não'))
     )
 """)
-def adicionando():
-    titulo = input("Digite o nome do livro que deseja cadastrar: ")
-    autor = input("Digite o nome do autor:  ")
-    ano = int(input("Digite o ano de lançamento do livro:  "))
+def adicionando(titulo,autor,ano):
     disponivel = "sim"
     cursor.execute("""
         INSERT INTO biblioteca (titulo, autor, ano, disponivel)
@@ -24,14 +22,14 @@ def adicionando():
 def mostra_lista():
     cursor.execute("SELECT * FROM biblioteca")
     for linha in cursor.fetchall():
-        print(f"ID: {linha[0]} | TITULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIVEL: {linha[4]}")
+        st.write(f"ID: {linha[0]} | TITULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIVEL: {linha[4]}")
 
 def atualizar_banco():
     print(mostra_lista)
 
-    id_livro = input("Digite o ID do livro que deseja atualizar: ")
+    id_livro = st.text_input("Digite o ID do livro que deseja atualizar: ")
 
-    disponivel = input("O livro esta disponivel so resposta de 'sim' or 'não':")
+    disponivel = st.text_input("O livro esta disponivel so resposta de 'sim' or 'não':")
 
     cursor.execute("""
     UPDATE biblioteca
@@ -40,36 +38,36 @@ def atualizar_banco():
     """,(disponivel, id_livro))
 
     conexao.commit()
-    print("Status do livro atualizado") 
+    st.success("Status do livro atualizado") 
 def deletar_banco():
     try:
         conexao = sqlite3.connect("biblioteca.db")
         cursor = conexao.cursor()
         mostra_lista()
-        id_livro = int(input("Digite o id do livro que deseja deletar: "))
+        id_livro = st.number_input("Digite o id do livro que deseja deletar: ")
         cursor.execute("DELETE FROM biblioteca WHERE id = ?", (id_livro,))
         conexao.commit()
        
         if cursor.rowcount > 0:
-            print("O livro foi removido com sucesso!")
+            st.success("O livro foi removido com sucesso!")
         else:
-            print("Nenhum livro cadastrado com o ID fornecido")
+            st.warning("Nenhum livro cadastrado com o ID fornecido")
     except Exception as erro:
-        print(f"Erro ao tentar excluir o livro {erro}")
+        st.error(f"Erro ao tentar excluir o livro {erro}")
     finally:
         #Sempre fecha a conexão, com sucesso ou erro
         if conexao:
             conexao.close()
-while True:
-        
-    pergunta=int(input("----------Menu----------\n1-Adicionar Livros\n2-Mostrar Livros\n3-Atualizar Livro\n4-Excluir Livro\n5-Sair\n----------Resposta----------\nR:"))
-    if pergunta == 1:
-        adicionando()
-    if pergunta == 2:
-        mostra_lista()
-    if pergunta ==3:
-        atualizar_banco()
-    if pergunta == 4:
-        deletar_banco()
-    if pergunta == 5:
-        break
+
+st.title("Bem vindo a minha biblioteca 2.0")
+titulo = st.text_input("Digite o nome do livro que deseja cadastrar:")
+autor = st.text_input("Digite o nome do autor:")
+ano = st.number_input("Digite o ano de lançamento do livro:", step=1, format="%d")
+
+# 👇 Botão abaixo dos inputs
+if st.button("Cadastrar livro📕"):
+    if titulo and autor:
+        adicionando(titulo, autor, ano)
+        st.success("Livro cadastrado com sucesso!")
+    else:
+        st.warning("Preencha todos os campos antes de cadastrar.")
